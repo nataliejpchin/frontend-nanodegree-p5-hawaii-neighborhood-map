@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A list of attractions in Hawaii with Google Map">
+  <meta name="author" content="Natalie Chin">
+
+  <title>Attractions in Hawaii</title>
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Page Title -->
+    <header>
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Attractions in Hawaii</h1>
+        </div>
+      </div>
+    </header>
+
+    <div id="mainContent">
+    
+      <div class="row">
+        
+        <div class="col-sm-4">
+        
+          <input id="search" class="form-control" placeholder="Search by name" data-bind="textInput: userInput, event: {keyup: filterMarkers}">
+
+          <div class="panel panel-default" id="key-locations">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Key Locations</div>
+
+            <!-- List group -->
+            <ul id="list-group" data-bind="foreach: visible">
+              <li class="list-group-item button-inactive" data-bind="text: name, click: $parent.showInfo"></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-8">
+          <div id="map"></div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div id="error"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="bower_components/knockout/dist/knockout.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="map.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?callback=initMap" onerror="googleError()"></script>
+
+  </body>
+
+</html>
