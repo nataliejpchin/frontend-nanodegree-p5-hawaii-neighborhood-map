@@ -1,5 +1,5 @@
 // hard-coded given array of locations
-var locationData = [ 
+var locationData = [
   {
         name: "Hanauma Bay",
         lat: 21.2688816,
@@ -27,12 +27,12 @@ var locationData = [
     }
 ];
 
-// declaring a variable that reference to the div that the map will be loaded into. 
+// declaring a variable that reference to the div that the map will be loaded into.
 var mapCanvas = document.getElementById('map');
 
 // initialize the map
 var map;
-function initMap() {    
+function initMap() {
 
     // Creating an object literal containing the required properties we want to pass to the map
     var mapOptions = {
@@ -51,14 +51,14 @@ function initMap() {
 
         scrollwheel: false
 
-    }
+    };
 
     //Calling the Google Map constructor, thereby initializing the map
     map = new google.maps.Map(mapCanvas, mapOptions);
 
-    // initialize viewModel - avoid running before Google Maps loads
+    // activating viewModel - avoid running before Google Maps loads
     ko.applyBindings(new viewModel());
-};
+}
 
 // Create alert if google maps failes to load
 function googleError() {
@@ -80,7 +80,7 @@ var viewModel = function () {
     var self = this;
 
     // Create an array of all places
-    this.attractionList = ko.observableArray([]);
+    self.attractionList = ko.observableArray([]);
 
     // Create new Attraction objects for each location data & store them in the attractionList array
     locationData.forEach(function(attractionItem) {
@@ -125,7 +125,7 @@ var viewModel = function () {
 
 	            //var url = '<a target="_blank" href="http:en.wikipedia.org/wiki/' + wikiArticleLink + '">' + 'More info </a>';
 
-	            
+
 	            attractionItem.url(data[2][0]);
 
 	            clearTimeout(wikiRequestTimeout);
@@ -134,16 +134,16 @@ var viewModel = function () {
 
 		        // Function to Bounce marker when clicked and stop bounce if marker is bouncing when clicked
 				function toggleBounce () {
-			        if (attractionItem.marker.getAnimation() != null) {
+			        if (attractionItem.marker.getAnimation() ==! null) {
 			            attractionItem.marker.setAnimation(null);
 			        } else {
 			            attractionItem.marker.setAnimation(google.maps.Animation.BOUNCE);
 			        }
-			    }        
+			    }
 
 				// Bounce marker and show infoWindow when marker is clicked
 			    google.maps.event.addListener(attractionItem.marker, 'click', function () {
-		            
+
 		            // call the toggleBounce function
 		            toggleBounce();
 
@@ -164,26 +164,22 @@ var viewModel = function () {
 
 	// Activate the appropriate marker when the user clicks a list item
     self.showInfo = function (attractionItem) {
-        google.maps.event.trigger(attractionItem.marker, 'click'); 
+        google.maps.event.trigger(attractionItem.marker, 'click');
     };
 
+    // Combine showInfo and selectedAttraction function
+    self.onClick = function (attractionItem) {
+        self.showInfo(attractionItem);
+        self.selectedAttraction(attractionItem);
+    };
 
-    //Add background color to selected attraction. 
-    //li is added dynamically so need to delegate event handler to li
-	$("#list-group").on('click','li',function(){
-		//remove previous selection
-		 $("#list-group .button-active").toggleClass("button-active button-inactive");
-	     $(this).toggleClass("button-active button-inactive");   
-	  });  
-
-    // close infoWindow if it is open before searching
-    $('#search').keydown(function(){
-    	if(infoWindow){
-    		infoWindow.close();
-    	}
-    });
-
-
+    // highlight selected Attraction on click
+    // This will hold the selected person
+    self.selectedAttraction = ko.observable();
+    self.select = function(attractionItem){
+        // The event receives the current data as parameter
+        self.selectedAttraction(attractionItem);
+    };
 
     // *** Filter markers and key location list based on search input
 
@@ -198,15 +194,20 @@ var viewModel = function () {
     // Track and store user input in search form
     self.userInput = ko.observable('');
 
-    // Compare user input and marker names. 
+    // Compare user input and marker names.
     // If user input can be found in the attraction name, attraction item remains visible
     // Remove all other markers not macthing user input.
     self.filterMarkers = function () {
-        
+
+        // close infoWindow if it is open before searching
+        if(infoWindow){
+            infoWindow.close();
+        }
+
         // change user input to lower case
         var searchInput = self.userInput().toLowerCase();
 
-		// When user types, remove all visible attraction items        
+		// When user types, remove all visible attraction items
         self.visible.removeAll();
 
         self.attractionList().forEach(function (place) {
@@ -215,7 +216,7 @@ var viewModel = function () {
             place.marker.setVisible(false);
 
             // Compare each attraction name to user input
-            // If user input can be found within attraction name, push it to visible array 
+            // If user input can be found within attraction name, push it to visible array
             // e.g., 'Blue Whale'.indexOf('Blue') !== -1; // true
             if (place.name().toLowerCase().indexOf(searchInput) !== -1) {
                 self.visible.push(place);

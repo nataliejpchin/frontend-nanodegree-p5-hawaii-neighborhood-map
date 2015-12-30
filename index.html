@@ -29,11 +29,11 @@
     </header>
 
     <div id="mainContent">
-    
+
       <div class="row">
-        
+
         <div class="col-sm-4">
-        
+
           <input id="search" class="form-control" placeholder="Search by name" data-bind="textInput: userInput, event: {keyup: filterMarkers}">
 
           <div class="panel panel-default" id="key-locations">
@@ -42,13 +42,13 @@
 
             <!-- List group -->
             <ul id="list-group" data-bind="foreach: visible">
-              <li class="list-group-item button-inactive" data-bind="text: name, click: $parent.showInfo"></li>
+              <li class="list-group-item" data-bind="text: name, click: $parent.onClick, css: {'button-active': $data == $parent.selectedAttraction()}"></li>
             </ul>
           </div>
         </div>
 
         <div class="col-sm-8">
-          <div id="map"></div>
+          <div id="map" class="map"></div>
         </div>
 
       </div>
