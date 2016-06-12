@@ -6,7 +6,7 @@ This is a project I created as part of the Udacity Frontend Nanodegree Program. 
 2. Unzip folder and double click on index.html
 3. You can search by name or click on the markers on the map to view information about the attraction
 
-**OR** view the project here http://njpchin.github.io/frontend-nanodegree-p5-hawaii-neighborhood-map
+**OR** view the project here http://nataliejpchin.github.io/frontend-nanodegree-p5-hawaii-neighborhood-map
 
 
 ## Framework, Libraries and APIs used
